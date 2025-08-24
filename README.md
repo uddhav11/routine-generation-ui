@@ -3,6 +3,7 @@
 ## Project info
 
 <!-- **URL**: https://lovable.dev/projects/2445ef54-66f9-4de1-aa1d-0a5e046ec908 -->
+This is a project which explores college routine generation by using different tools and technology. this is just the UI part with no real backend logic.
 
 ## How can I edit this code?
 
