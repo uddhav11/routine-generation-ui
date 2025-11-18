@@ -1,11 +1,16 @@
 import React from "react";
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import { useDispatch, UseDispatch } from "react-redux";
+import { loginUser } from "../app/auth/authSlice";
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
     const [message, setMessage] = useState("");
+
+    const dispatch= useDispatch<any>();
+
   const handleLogin = (e) => {
     e.preventDefault();
 
@@ -13,8 +18,10 @@ const Login = () => {
       setMessage("Please fill in all fields");
       return;
     }
-    // Handle login logic here
-    console.log("Logging in with:", { email, password });
+    
+    const response= dispatch(loginUser({email, password}))
+    // console.log("Logging in with:", { email, password });
+    console.log('login response: ', response);
   }
   return (
     <div className="flex min-h-screen bg-gray-100">

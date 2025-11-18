@@ -89,6 +89,8 @@
 
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { registerUser } from "../app/auth/authSlice";
 
 const Register = () => {
   const [email, setEmail] = useState("");
@@ -98,6 +100,9 @@ const Register = () => {
   const [lastName, setLastName] = useState("");
   const [username, setUsername] = useState("");
     const [message, setMessage] = useState("");
+
+    const dispatch = useDispatch<any>();
+
     
 
   const handleRegister = (e) => {
@@ -112,7 +117,8 @@ const Register = () => {
       setMessage("Please fill in all fields");
       return;
     }
-    // Handle register logic here
+    const response= dispatch(registerUser({firstname: firstName, lastname: lastName, email, username, password}));
+    console.log('Registration response: ', response)
   };
 
   return (
