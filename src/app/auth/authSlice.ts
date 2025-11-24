@@ -1,19 +1,14 @@
-// src/redux/authSlice.ts
-
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 
-const API_BASE = import.meta.env.VITE_API_URL || "http://localhost4000/api"; 
+const API_BASE = import.meta.env.VITE_API_URL || "http://localhost4000/api";
 
-// Axios instance
 const api = axios.create({
   baseURL: API_BASE,
   withCredentials: true,
 });
 
-// -----------------------
-// Types
-// -----------------------
+
 export interface User {
   id?: string;
   firstname: string;
@@ -30,9 +25,8 @@ export interface AuthState {
   success: boolean;
 }
 
-// -----------------------
-// Initial State
-// -----------------------
+
+
 const initialState: AuthState = {
   user: null,
   token: localStorage.getItem("token") || null,
@@ -41,11 +35,8 @@ const initialState: AuthState = {
   success: false,
 };
 
-// -----------------------
-// Thunks
-// -----------------------
 
-// REGISTER
+// registration thunk
 export const registerUser = createAsyncThunk(
   "auth/registerUser",
   async (
@@ -59,6 +50,7 @@ export const registerUser = createAsyncThunk(
     thunkAPI
   ) => {
     try {
+      console.log("registering data:- ", payload);
       const res = await api.post("/auth/register/", payload);
       return res.data; // expected: { token, user }
     } catch (err: any) {
@@ -69,11 +61,12 @@ export const registerUser = createAsyncThunk(
   }
 );
 
-// LOGIN
+// login thunk
 export const loginUser = createAsyncThunk(
   "auth/loginUser",
   async (payload: { email: string; password: string }, thunkAPI) => {
     try {
+      console.log("logging data:- ", payload);
       const res = await api.post("/auth/login/", payload);
       return res.data; // expected: { token, user }
     } catch (err: any) {
@@ -84,7 +77,8 @@ export const loginUser = createAsyncThunk(
   }
 );
 
-// GET PROFILE (requires token)
+
+// get profile thunk
 export const getProfile = createAsyncThunk(
   "auth/getProfile",
   async (_, thunkAPI) => {
@@ -100,7 +94,7 @@ export const getProfile = createAsyncThunk(
         headers: { Authorization: `Bearer ${token}` },
       });
 
-      return res.data; // expected: { user }
+      return res.data; 
     } catch (err: any) {
       return thunkAPI.rejectWithValue(
         err.response?.data?.message || "Failed to fetch profile"
@@ -109,9 +103,20 @@ export const getProfile = createAsyncThunk(
   }
 );
 
-// -----------------------
-// Slice
-// -----------------------
+export const LogoutUser = createAsyncThunk(
+  "auth/logoutUser",
+  async (_, thunkAPI) => {
+    try {
+      const response = await api.post("/auth/logout");
+      return response.data;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(
+        error.response?.data?.message || "Logout failed"
+      );
+    }
+  }
+);
+
 const authSlice = createSlice({
   name: "auth",
   initialState,
@@ -180,9 +185,8 @@ const authSlice = createSlice({
   },
 });
 
-// -----------------------
-// Export actions + reducer
-// -----------------------
+
+
 export const { logout, resetAuthState } = authSlice.actions;
 
 export default authSlice.reducer;
