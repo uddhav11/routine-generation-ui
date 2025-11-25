@@ -3,6 +3,7 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import { useDispatch, UseDispatch } from "react-redux";
 import { loginUser } from "../app/auth/authSlice";
+import { useNavigate } from "react-router-dom";
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -10,8 +11,9 @@ const Login = () => {
     const [message, setMessage] = useState("");
 
     const dispatch= useDispatch<any>();
+    const navigate= useNavigate()
 
-  const handleLogin = (e) => {
+  const handleLogin = async(e) => {
     e.preventDefault();
 
      if (!email || !password) {
@@ -19,7 +21,11 @@ const Login = () => {
       return;
     }
     
-    const response= dispatch(loginUser({email, password}))
+    const response= await dispatch(loginUser({email, password})).unwrap(); 
+
+      console.log("Success data:", response);
+
+      navigate("/dashboard");
     // console.log("Logging in with:", { email, password });
     console.log('login response: ', response);
   }

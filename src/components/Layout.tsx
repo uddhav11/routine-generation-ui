@@ -41,10 +41,10 @@ export function Layout({ children, activeTab, onTabChange }: LayoutProps) {
           {/* Logo */}
           <div className="flex h-16 items-center justify-between px-6 border-b border-border">
             <div className="flex items-center space-x-2">
-              <div className="w-8 h-8 bg-gradient-primary rounded-lg flex items-center justify-center">
+              <div className="w-8 h-8 bg-gradient-to-r from-primary to-primary-glow rounded-lg flex items-center justify-center">
                 <Calendar className="w-5 h-5 text-white" />
               </div>
-              <h1 className="text-xl font-bold bg-gradient-primary bg-clip-text text-transparent">
+              <h1 className="text-xl font-bold bg-gradient-to-r from-primary to-primary-glow bg-clip-text text-transparent">
                 RoutinePro
               </h1>
             </div>
@@ -70,7 +70,7 @@ export function Layout({ children, activeTab, onTabChange }: LayoutProps) {
                   variant={isActive ? "default" : "ghost"}
                   className={cn(
                     "w-full justify-start text-left font-normal",
-                    isActive && "bg-gradient-primary shadow-soft"
+                    isActive && "bg-primary text-primary-foreground"
                   )}
                   onClick={() => {
                     onTabChange(item.id);
@@ -95,27 +95,16 @@ export function Layout({ children, activeTab, onTabChange }: LayoutProps) {
 
       {/* Main content */}
       <div className="lg:ml-64">
-        {/* Header */}
-        <header className="sticky top-0 z-30 h-16 bg-white/95 backdrop-blur-lg border-b border-border shadow-soft">
-          <div className="flex h-full items-center justify-between px-6">
-            <div className="flex items-center space-x-4">
-              <Button
-                variant="ghost"
-                size="sm"
-                className="lg:hidden"
-                onClick={() => setSidebarOpen(true)}
-              >
-                <Menu className="w-4 h-4" />
-              </Button>
-              <h2 className="text-xl font-semibold text-foreground">
-                {navigationItems.find(item => item.id === activeTab)?.label || 'Dashboard'}
-              </h2>
-            </div>
-          </div>
-        </header>
-
         {/* Page content */}
-        <main className="p-6">
+        <main className="p-4 pt-2">
+          <Button
+            variant="ghost"
+            size="sm"
+            className="lg:hidden mb-2"
+            onClick={() => setSidebarOpen(true)}
+          >
+            <Menu className="w-4 h-4" />
+          </Button>
           {children}
         </main>
       </div>

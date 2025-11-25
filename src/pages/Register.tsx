@@ -12,7 +12,7 @@
 //   const handleRegister = (e) => {
 //     e.preventDefault();
 //     // Handle login logic here
-    
+
 //   };
 //   return (
 //     <div className="flex items-center justify-center min-h-screen bg-gray-100">
@@ -82,15 +82,11 @@
 
 // export default Register;
 
-
-
-
-
-
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { registerUser } from "../app/auth/authSlice";
+import { useNavigate } from "react-router-dom";
 
 const Register = () => {
   const [email, setEmail] = useState("");
@@ -99,13 +95,12 @@ const Register = () => {
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [username, setUsername] = useState("");
-    const [message, setMessage] = useState("");
+  const [message, setMessage] = useState("");
 
-    const dispatch = useDispatch<any>();
+  const dispatch = useDispatch<any>();
+  const navigate = useNavigate();
 
-    
-
-  const handleRegister = (e) => {
+  const handleRegister = async (e) => {
     e.preventDefault();
 
     if (password !== confirmPassword) {
@@ -117,8 +112,23 @@ const Register = () => {
       setMessage("Please fill in all fields");
       return;
     }
-    const response= dispatch(registerUser({firstname: firstName, lastname: lastName, email, username, password}));
-    console.log('Registration response: ', response)
+    try {
+      const data = await dispatch(
+        registerUser({
+          first_name: firstName,
+          last_name: lastName,
+          email,
+          username,
+          password,
+        })
+      ).unwrap(); 
+
+      console.log("Success data:", data);
+
+      navigate("/login");
+    } catch (error: any) {
+      console.log("Error:", error);
+    }
   };
 
   return (
@@ -193,7 +203,9 @@ const Register = () => {
               </Link>{" "}
               as User.
             </p>
-        {message && <span className="text-red-700 font-bold">{message}</span>}
+            {message && (
+              <span className="text-red-700 font-bold">{message}</span>
+            )}
             <button className="w-full bg-blue-600 text-white py-2 rounded-lg font-medium hover:bg-blue-700 transition">
               Register
             </button>
@@ -205,4 +217,3 @@ const Register = () => {
 };
 
 export default Register;
-

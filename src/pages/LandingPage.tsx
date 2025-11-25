@@ -177,7 +177,7 @@
 
 
 "use client";
-import React, { useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import {
@@ -195,6 +195,8 @@ import {
   Menu,
   X,
 } from "lucide-react";
+import { useSelectMultiple } from "react-day-picker";
+import { useSelector } from "react-redux";
 
 export default function LandingPage() {
   const year = useMemo(() => new Date().getFullYear(), []);
@@ -214,6 +216,14 @@ export default function LandingPage() {
     if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
     setOpen(false);
   };
+
+  useEffect(() => {
+    const user= localStorage.getItem("user");
+    // if(!user){
+    //   const user= useSelector((state: any) => state.auth.user);
+    //   console.log('this is the use from landing page :- ', user);
+    // }
+  })
 
   return (
     <div className="font-sans text-slate-800 selection:bg-blue-100">
